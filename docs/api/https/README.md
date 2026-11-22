@@ -20,7 +20,7 @@ After certificate expiry or a LAN IP change, stop the service, rerun setup with 
 
 ```powershell
 .\Stop-SpeechApi.ps1
-.\Setup-Https.ps1 -Address '<server-ip>'
+.\scripts\Setup-Https.ps1 -Address '<server-ip>'
 .\Start-SpeechApi.ps1
 ```
 

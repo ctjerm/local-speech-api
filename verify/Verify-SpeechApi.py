@@ -16,7 +16,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:7860")
     args = parser.parse_args()
-    root = Path(__file__).resolve().parent
+    root = Path(__file__).resolve().parents[1]
     output = root / "runtime/verification"
     output.mkdir(exist_ok=True, parents=True)
     report = {}

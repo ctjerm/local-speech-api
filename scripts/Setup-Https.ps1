@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param([Parameter(Mandatory)][string]$Address)
 $ErrorActionPreference = 'Stop'
-$tls = Join-Path $PSScriptRoot 'runtime\tls'
+$tls = Join-Path (Split-Path $PSScriptRoot -Parent) 'runtime\tls'
 New-Item -ItemType Directory -Path $tls -Force | Out-Null
 # Private keys stay in the project, readable only by this account and SYSTEM.
 $acl = Get-Acl -LiteralPath $tls

@@ -44,7 +44,7 @@ if (-not (Test-Path '.\runtime\browser-qa\.venv\Scripts\python.exe')) {
 }
 uv pip install --python '.\runtime\browser-qa\.venv\Scripts\python.exe' playwright==1.64.0
 & .\runtime\browser-qa\.venv\Scripts\python.exe -m playwright install chromium --only-shell
-& .\runtime\browser-qa\.venv\Scripts\python.exe .\Verify-Website.py
+& .\runtime\browser-qa\.venv\Scripts\python.exe .\verify\Verify-Website.py
 & .\runtime\browser-qa\.venv\Scripts\python.exe -m playwright uninstall
 uv pip uninstall --python '.\runtime\browser-qa\.venv\Scripts\python.exe' playwright greenlet pyee typing-extensions
 uv cache clean --cache-dir $env:UV_CACHE_DIR

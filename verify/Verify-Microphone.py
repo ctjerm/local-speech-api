@@ -10,7 +10,7 @@ from pathlib import Path
 
 from playwright.sync_api import expect, sync_playwright
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "runtime" / "verification" / "microphone"
 os.environ["PLAYWRIGHT_BROWSERS_PATH"] = str(ROOT / "runtime" / "browser-qa" / "browsers")
 os.environ["TEMP"] = os.environ["TMP"] = str(ROOT / "runtime" / "scratch" / "temp")

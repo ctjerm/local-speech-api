@@ -3,7 +3,7 @@
 param()
 
 $ErrorActionPreference = 'Stop'
-$config = Import-PowerShellDataFile (Join-Path $PSScriptRoot 'service.psd1')
+$config = Import-PowerShellDataFile (Join-Path (Split-Path $PSScriptRoot -Parent) 'service.psd1')
 $ruleName = 'LocalSpeechAPI-PrivateLAN'
 if (Get-NetFirewallRule -Name $ruleName -ErrorAction SilentlyContinue) {
     throw "Rule $ruleName already exists. Inspect its scope before changing it."

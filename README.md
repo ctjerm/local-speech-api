@@ -61,11 +61,11 @@ Speech returns streaming raw mono PCM, signed 16-bit little-endian, with the sam
 Other devices on the network reach the service at `http://<server-ip>:7860`. Browsers allow microphone recording only on localhost or trusted HTTPS, so for recording from a phone:
 
 ```powershell
-.\Setup-Https.ps1 -Address '<server-ip>'
+.\scripts\Setup-Https.ps1 -Address '<server-ip>'
 .\Start-SpeechApi.ps1
 ```
 
-Each device then installs the public certificate once from `http://<server-ip>:7860/assets/recording/setup.html` and uses `https://<server-ip>:8443/`. Private keys stay in `runtime/tls`. `Enable-Lan.ps1` (administrator) adds a firewall rule limited to the local subnet. See [HTTPS and microphone access](docs/api/https/README.md).
+Each device then installs the public certificate once from `http://<server-ip>:7860/assets/recording/setup.html` and uses `https://<server-ip>:8443/`. Private keys stay in `runtime/tls`. `scripts\Enable-Lan.ps1` (administrator) adds a firewall rule limited to the local subnet. See [HTTPS and microphone access](docs/api/https/README.md).
 
 The API has no authentication. Run it on a network you trust.
 
@@ -76,7 +76,7 @@ The API has no authentication. Run it on a network you trust.
 .\tests\Test-StartupRollback.ps1
 ```
 
-Unit tests replace the models with fakes, so they run without loading weights. `Verify-SpeechApi.py`, `Verify-Breeze.py`, `Verify-Website.py` and `Verify-Microphone.py` check the running service with the real models, the last two in headless Chromium. See [verification](docs/verification.md) for measured results and limits, and [website](docs/website.md) for the browser checks.
+Unit tests replace the models with fakes, so they run without loading weights. The scripts in `verify` (`Verify-SpeechApi.py`, `Verify-Breeze.py`, `Verify-Website.py` and `Verify-Microphone.py`) check the running service with the real models, the last two in headless Chromium. See [verification](docs/verification.md) for measured results and limits, and [website](docs/website.md) for the browser checks.
 
 ## Layout
 
@@ -88,6 +88,9 @@ Unit tests replace the models with fakes, so they run without loading weights. `
 | `web` | Browser app: forms, API calls, playback, waveform and microphone recording |
 | `tests` | Unit tests and the startup rollback test |
 | `examples` | Standard-library clients |
+| `scripts` | Model installers, HTTPS setup, firewall rule and process helpers |
+| `verify` | Checks against the running service with the real models |
+| `requirements` | Pinned Python dependencies for the two environments |
 | `runtime` | Installed Python, environments, models, caches, logs and certificates (not in Git) |
 
 ## Licences

@@ -2,13 +2,14 @@
 param()
 
 $ErrorActionPreference = 'Stop'
-$config = Import-PowerShellDataFile (Join-Path $PSScriptRoot 'service.psd1')
-$runtimeRoot = Join-Path $PSScriptRoot $config.RuntimeRoot
+$projectRoot = Split-Path $PSScriptRoot -Parent
+$config = Import-PowerShellDataFile (Join-Path $projectRoot 'service.psd1')
+$runtimeRoot = Join-Path $projectRoot $config.RuntimeRoot
 $source = Join-Path $runtimeRoot 'upstream'
 $python = Join-Path $runtimeRoot '.venv\Scripts\python.exe'
 Get-Command uv, git -ErrorAction Stop | Out-Null
-. (Join-Path $PSScriptRoot 'scripts\InstallEnvironment.ps1')
-$basePython = Initialize-InstallEnvironment $PSScriptRoot
+. (Join-Path $PSScriptRoot 'InstallEnvironment.ps1')
+$basePython = Initialize-InstallEnvironment $projectRoot
 New-Item -ItemType Directory -Path $runtimeRoot -Force | Out-Null
 
 if (-not (Test-Path -LiteralPath $source)) {
@@ -28,7 +29,7 @@ if (-not (Test-Path -LiteralPath $python)) {
 }
 & uv pip install --python $python torch==2.9.1 torchaudio==2.9.1 --index-url https://download.pytorch.org/whl/cu128
 if ($LASTEXITCODE -ne 0) { throw 'CUDA PyTorch installation failed.' }
-& uv pip install --python $python -r (Join-Path $PSScriptRoot 'requirements.lock.txt')
+& uv pip install --python $python -r (Join-Path $projectRoot 'requirements\requirements.lock.txt')
 if ($LASTEXITCODE -ne 0) { throw 'Runtime dependency installation failed.' }
 & $python -c 'import sys; from huggingface_hub import snapshot_download; snapshot_download("BreezeBlue/Breeze-TTS-2", revision=sys.argv[1], local_dir=sys.argv[2], token=False, max_workers=3, ignore_patterns=["assets/*"])' $config.ModelRevision (Join-Path $runtimeRoot 'model')
 if ($LASTEXITCODE -ne 0) { throw 'Model download failed; rerun to resume.' }

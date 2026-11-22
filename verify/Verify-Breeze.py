@@ -1,6 +1,6 @@
 r"""Exercise the running API and retain a small WAV plus a JSON verification record.
 
-Run with runtime\breeze\.venv\Scripts\python.exe Verify-Breeze.py from this project.
+Run with runtime\breeze\.venv\Scripts\python.exe verify\Verify-Breeze.py from this project.
 """
 
 import argparse
@@ -34,7 +34,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:7860")
     parser.add_argument("--lan-url", required=True, help="This PC's LAN address, e.g. http://<server-ip>:7860")
-    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "runtime/verification/breeze")
+    parser.add_argument("--output", type=Path, default=Path(__file__).resolve().parents[1] / "runtime/verification/breeze")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     report = {"url": args.url, "lan_url_on_this_pc": args.lan_url, "remote_lan_test": "not performed"}
