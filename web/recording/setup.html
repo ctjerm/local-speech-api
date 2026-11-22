@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Microphone setup · Voice room</title><link rel="stylesheet" href="/assets/styles.css"><script type="module" src="/assets/recording/setup.js"></script></head>
+<body><div class="page-shell"><header class="topbar"><a class="brand" href="/">Voice room</a><a class="docs-link" href="/">Back to studio ↗</a></header>
+<main class="setup-guide"><p class="eyebrow">ONE-TIME DEVICE SETUP</p><h1>Give your microphone a secure connection.</h1>
+<p>Browsers require a trusted HTTPS connection to record from another device. Install this server’s public certificate once on each device, then open the secure studio.</p>
+<p>If you’re using the server PC itself, <a href="http://localhost:7860/">localhost</a> also supports recording.</p>
+<ol>
+<li><h2>Download the certificate</h2><p><a id="certificate-download" class="button secondary" href="/setup/local-ca.cer" download>Download Voice room certificate</a></p><p id="certificate-status">Checking this server’s certificate…</p><p class="field-hint">Compare this SHA-256 fingerprint with the one supplied by the server owner before trusting it:</p><code id="certificate-fingerprint" class="certificate-fingerprint"></code></li>
+<li><h2>Trust it on this device</h2>
+<details><summary>iPhone / iPad</summary><p>Open the downloaded certificate and install its profile in Settings → General → VPN &amp; Device Management. Then go to Settings → General → About → Certificate Trust Settings and enable full trust for <strong>Voice room Local CA</strong>.</p><p><a href="https://support.apple.com/en-us/102390" target="_blank" rel="noopener">Apple’s certificate trust instructions ↗</a></p></details>
+<details><summary>Android</summary><p>In Settings, search for <strong>Install a certificate</strong>. Choose <strong>CA certificate</strong> and select the downloaded file. The option is usually under Security &amp; privacy → More security settings → Encryption &amp; credentials; names vary by device. Restart the browser afterward.</p></details>
+<details><summary>Windows</summary><p>Open the downloaded certificate, choose <strong>Install Certificate</strong>, select <strong>Current User</strong>, then place it in <strong>Trusted Root Certification Authorities</strong>. Confirm the certificate name and fingerprint. Restart your browser if necessary.</p></details>
+<details><summary>Mac</summary><p>Open the certificate in Keychain Access and add it to your login keychain. Open <strong>Voice room Local CA</strong>, expand Trust, and allow it for SSL. Your Mac may ask for your password to confirm the change.</p></details>
+<p class="field-hint">Only trust the certificate from your own server. This creates a local trust authority; its private key stays on the server. You can remove “Voice room Local CA” from your device’s certificates when you no longer use this service.</p></li>
+<li><h2>Record in the secure studio</h2><p><a id="open-secure-studio" class="button primary" hidden>Open secure studio ↗</a></p><p>Choose Transcribe audio → Record microphone, allow microphone access, then stop and transcribe. A certificate warning means device setup is not complete.</p></li>
+</ol></main></div></body></html>

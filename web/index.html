@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f2">
+  <meta name="description" content="Create speech and transcribe audio with your local speech models.">
+  <title>Voice room</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232d493d'/%3E%3Cpath d='M12 16v8m8-13v18m8-13v8' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="module" src="/assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Voice room home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>Voice room</span>
+      </a>
+      <div class="topbar-right">
+        <a class="docs-link" href="/docs" target="_blank" rel="noopener">API docs <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="workspace">
+      <div class="workspace-heading">
+        <div class="tabs" role="tablist" aria-label="Audio tools">
+          <button id="speak-tab" class="tab" role="tab" aria-selected="true" aria-controls="speak-panel" data-panel="speak"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Zm4 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg>Create speech</button>
+          <button id="transcribe-tab" class="tab" role="tab" aria-selected="false" aria-controls="transcribe-panel" tabindex="-1" data-panel="transcribe"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5V4Zm10 0v5h4M8 13h8M8 16h6"/></svg>Transcribe audio</button>
+        </div>
+      </div>
+
+      <section id="speak-panel" class="workspace-grid" role="tabpanel" aria-labelledby="speak-tab">
+        <form id="speech-form" class="card input-card">
+          <div class="card-heading"><div><p class="eyebrow">TEXT TO SPEECH</p><h2>Generate speech</h2></div></div>
+          <div class="label-row"><label for="speech-text">Your text</label><button id="example-button" class="text-button" type="button">Try an example <span aria-hidden="true">↗</span></button></div>
+          <textarea id="speech-text" class="speech-text" placeholder="Enter the text to read aloud." required aria-describedby="text-count"></textarea>
+          <div class="input-footnote"><span id="speech-languages" hidden></span><span id="text-count">0 characters</span></div>
+          <div id="voice-options" hidden>
+            <label for="voice-direction">Voice direction <span class="optional">optional</span></label>
+            <input id="voice-direction" type="text" placeholder="A warm, clear narrator with a calm delivery.">
+            <p class="field-hint">Describe the tone, accent, or style you have in mind.</p>
+          </div>
+          <div class="form-actions"><button id="generate-button" class="button primary" type="submit" disabled><span class="button-icon" aria-hidden="true">✦</span><span class="button-label">Generate speech</span></button><button id="cancel-speech" class="button quiet" type="button" hidden>Cancel</button></div>
+          <p id="speech-status" class="feedback" role="status" aria-live="polite">Your first request after startup may take a little longer.</p>
+        </form>
+
+        <aside class="card output-card" aria-labelledby="audio-heading">
+          <div class="output-heading"><h2 id="audio-heading">Your audio</h2></div>
+          <div id="audio-empty" class="empty-state"><div class="empty-orbit" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M12 20v8m8-15v22m8-26v30m8-19v8"/></svg></div><h3>No audio generated yet</h3><p>Enter text and select Generate speech.<br>Preview or download the audio here.</p></div>
+          <div id="audio-result" class="audio-result" hidden>
+            <div class="result-label"><span class="ready-dot"></span>Ready to listen<span id="audio-duration"></span></div>
+            <canvas id="waveform" class="waveform" aria-hidden="true"></canvas>
+            <audio id="speech-player" controls preload="metadata" aria-label="Generated speech"></audio>
+            <div class="result-actions"><a id="audio-download" class="button secondary" download="speech.wav"><span aria-hidden="true">↓</span> Download WAV</a><button id="use-audio" class="text-button" type="button">Transcribe this <span aria-hidden="true">→</span></button></div>
+            <p class="result-note">Audio from your last successful generation.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section id="transcribe-panel" class="workspace-grid" role="tabpanel" aria-labelledby="transcribe-tab" hidden>
+        <form id="transcription-form" class="card input-card">
+          <div class="card-heading"><div><p class="eyebrow">SPEECH TO TEXT</p><h2>Transcribe audio</h2></div></div>
+          <div id="microphone-box" class="microphone-box">
+            <div class="microphone-actions"><button id="microphone-button" class="button secondary" type="button" aria-pressed="false" aria-describedby="microphone-status"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></svg><span id="microphone-label">Record microphone</span></button><button id="cancel-recording" class="text-button" type="button" hidden>Cancel recording</button></div>
+            <div class="recording-clock"><span class="recording-dot" aria-hidden="true"></span><span id="recording-timer" role="timer" aria-label="Recording duration">0:00</span><span id="recording-limit">Up to 30 minutes</span></div>
+            <p id="microphone-status" class="feedback" role="status" aria-live="polite"></p>
+            <div id="microphone-help" class="microphone-help" hidden><a id="secure-website" class="text-button" hidden>Open secure website ↗</a><a class="text-button" href="/assets/recording/setup.html" target="_blank" rel="noopener">Set up microphone access ↗</a></div>
+          </div>
+          <label for="audio-file">Your recording</label>
+          <div id="drop-zone" class="drop-zone">
+            <svg class="upload-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 21V5m-6 6 6-6 6 6M6 20v7h20v-7"/></svg>
+            <strong>Drop an audio file here</strong><span>or <label class="file-picker-label" for="audio-file">choose a file</label></span>
+            <input id="audio-file" class="file-input" type="file" accept="audio/*,.flac" aria-describedby="upload-hint">
+            <small id="upload-hint">WAV or FLAC recommended · up to 64 MiB</small>
+          </div>
+          <div id="selected-file" class="selected-file" hidden><span class="file-symbol" aria-hidden="true">♫</span><div class="file-details"><strong id="file-name"></strong><span id="file-size"></span></div><button id="remove-file" class="icon-button" type="button" aria-label="Remove selected file">×</button></div>
+          <audio id="upload-player" controls preload="metadata" aria-label="Uploaded audio preview" hidden></audio>
+          <p id="preview-note" class="field-hint" hidden>Preview isn’t available for this file in your browser. You can still try transcription.</p>
+          <div class="language-note" id="transcription-language-note" hidden><span aria-hidden="true">◎</span><p id="transcription-languages"></p></div>
+          <div class="form-actions"><button id="transcribe-button" class="button primary" type="submit" disabled><span class="button-icon" aria-hidden="true">↗</span><span class="button-label">Transcribe audio</span></button><button id="cancel-transcription" class="button quiet" type="button" hidden>Cancel</button></div>
+          <p id="transcription-status" class="feedback" role="status" aria-live="polite">Choose a recording to get started.</p>
+        </form>
+
+        <aside class="card output-card" aria-labelledby="transcript-heading">
+          <div class="output-heading"><h2 id="transcript-heading">Your transcript</h2><span class="output-format">TEXT</span></div>
+          <div id="transcript-empty" class="empty-state"><div class="empty-orbit document-orbit" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M13 9h15l7 7v23H13V9Zm15 0v8h7M19 24h10m-10 6h7"/></svg></div><h3>No transcript yet</h3><p>Record or upload audio, then select Transcribe audio.<br>Copy or download the transcript here.</p></div>
+          <div id="transcript-result" class="transcript-result" hidden><p id="transcript-meta" class="result-label"></p><label class="sr-only" for="transcript-text">Recognized text</label><textarea id="transcript-text" readonly></textarea><div class="result-actions"><button id="copy-transcript" class="button secondary" type="button">Copy text</button><a id="transcript-download" class="text-button" download="transcript.txt">Download .txt <span aria-hidden="true">↓</span></a></div><p id="copy-status" class="field-hint" role="status"></p></div>
+        </aside>
+      </section>
+      <noscript><p class="noscript-note">Enable JavaScript to use the audio tools. The <a href="/docs">API documentation</a> is also available.</p></noscript>
+    </main>
+  </div>
+</body>
+</html>

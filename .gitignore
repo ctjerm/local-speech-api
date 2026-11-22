@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.wav
+*.pcm
+.pytest_cache/
+.ruff_cache/
+runtime/
